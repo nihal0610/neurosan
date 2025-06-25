@@ -1,0 +1,58 @@
+{
+  "llm_config": {
+    "class": "groq",
+    "model_name": "llama3-70b-8192",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "model_kwargs": {
+      "top_p": 0.9
+    }
+  },
+  "tools": [
+    {
+      "name": "current_time_tool",
+
+      "function": {
+        "description": "Provides the current date and time in various formats.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "inquiry": {
+              "type": "string",
+              "description": "Ask what time or date it is, optionally with a desired format (e.g., '%Y/%m/%d')."
+            }
+          },
+          "required": ["inquiry"]
+        }
+      },
+
+      "instructions": """
+You are an AI assistant that helps users find out the current date and time.
+When a user asks you what time or date it is, parse their intent.
+If they mention a format (like 'just the date', or '12-hour format'), extract it and pass it to the TimeAPI tool.
+Reply clearly using the tool’s output.
+""",
+
+      "tools": ["TimeAPI"]
+    },
+
+    {
+      "name": "TimeAPI",
+      "class": "time_tool.CurrentTimeTool",
+
+      "function": {
+        "description": "Returns the current system time formatted as per user request.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string",
+              "description": "Optional datetime format string like '%Y-%m-%d %I:%M %p'"
+            }
+          },
+          "required": []
+        }
+      }
+    }
+  ]
+}

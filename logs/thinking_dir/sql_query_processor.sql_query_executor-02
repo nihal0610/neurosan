@@ -1,0 +1,12 @@
+
+[AGENT]:
+Received arguments {'query': 'DESCRIBE equipments;', 'origin': [{'tool': 'sql_query_processor', 'instantiation_index': 1}, {'tool': 'sql_query_executor', 'instantiation_index': 2}], 'origin_str': 'sql_query_processor.sql_query_executor-02'}
+
+[AGENT]:
+Got result: {'status': 'success', 'columns': ['Field', 'Type', 'Null', 'Key', 'Default', 'Extra'], 'result': [('Equipment_ID', 'varchar(10)', 'NO', 'PRI', None, ''), ('Equipment_Name', 'varchar(50)', 'NO', '', None, '')]}
+
+[AGENT]:
+Received arguments {'query': 'SELECT Equipment_ID, Equipment_Name FROM equipments;', 'origin': [{'tool': 'sql_query_processor', 'instantiation_index': 1}, {'tool': 'sql_query_executor', 'instantiation_index': 2}], 'origin_str': 'sql_query_processor.sql_query_executor-02'}
+
+[AGENT]:
+Got result: {'status': 'success', 'columns': ['Equipment_ID', 'Equipment_Name'], 'result': [('M001', 'Packer'), ('M002', 'Labeller'), ('M003', 'Sealer'), ('M004', 'Cartoner'), ('M005', 'Wrapper')]}

@@ -1,0 +1,90 @@
+
+[SYSTEM]:
+You are a component of an enterprise SQL query processing assistant. Only answer requests related to SQL database operations, query conversion, execution, optimization, or result summarization. Do not handle personal, unrelated, or non-SQL matters. You convert plain language inquiries into correct SQL query syntax. Output well-formed SQL.
+
+[SYSTEM]:
+The inquiry is "show me all table names".
+
+[HUMAN]:
+{aaosa_command}
+
+[AI]:
+Here is the SQL query to show all table names:
+
+```
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'public';
+```
+
+This query uses the `information_schema` database, which is a standard database in SQL that provides metadata about the database. The `tables` table within `information_schema` contains a list of all tables in the database. The `table_name` column contains the name of each table. The `WHERE` clause filters the results to only include tables in the `public` schema, which is the default schema in most SQL databases.
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 118.0,
+    "prompt_tokens": 171.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 12.936812162399292,
+    "total_cost": 0.0,
+    "total_tokens": 289.0
+}
+
+[SYSTEM]:
+You are a component of an enterprise SQL query processing assistant. Only answer requests related to SQL database operations, query conversion, execution, optimization, or result summarization. Do not handle personal, unrelated, or non-SQL matters. You convert plain language inquiries into correct SQL query syntax. Output well-formed SQL.
+
+[SYSTEM]:
+The inquiry is "What are the equipments and their machine ID".
+
+[HUMAN]:
+{aaosa_command}
+
+[AI]:
+Here is the SQL query to answer the inquiry:
+
+```
+SELECT equipment, machine_id
+FROM equipments_table;
+```
+
+Note: Assuming the table name is `equipments_table` and it has columns `equipment` and `machine_id`. If the table or column names are different, please provide the correct names for a more accurate response.
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 69.0,
+    "prompt_tokens": 177.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 1.0363821983337402,
+    "total_cost": 0.0,
+    "total_tokens": 246.0
+}
+
+[SYSTEM]:
+You are a component of an enterprise SQL query processing assistant. Only answer requests related to SQL database operations, query conversion, execution, optimization, or result summarization. Do not handle personal, unrelated, or non-SQL matters. You convert plain language inquiries into correct SQL query syntax. Output well-formed SQL.
+
+[SYSTEM]:
+The inquiry is "From equipment table give me machineID and their Machine name".
+
+[HUMAN]:
+{aaosa_command}
+
+[AI]:
+SELECT machineID, MachineName FROM equipment;
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 10.0,
+    "prompt_tokens": 183.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 0.31815528869628906,
+    "total_cost": 0.0,
+    "total_tokens": 193.0
+}

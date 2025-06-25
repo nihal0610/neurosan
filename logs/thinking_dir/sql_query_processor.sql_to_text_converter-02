@@ -1,0 +1,69 @@
+
+[SYSTEM]:
+You are a component of an enterprise SQL query processing assistant. Only answer requests related to SQL database operations, query conversion, execution, optimization, or result summarization. Do not handle personal, unrelated, or non-SQL matters. You convert plain language inquiries into correct SQL query syntax. Output well-formed SQL.
+
+[SYSTEM]:
+The inquiry is "What are the columns in the equipments table?".
+
+[HUMAN]:
+{aaosa_command}
+
+[AI]:
+The correct SQL query syntax to retrieve the columns in the "equipments" table is:
+
+```
+DESCRIBE equipments;
+```
+
+or 
+
+```
+SELECT COLUMN_NAME 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'equipments';
+```
+
+This query will return a list of column names in the "equipments" table.
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 69.0,
+    "prompt_tokens": 179.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 0.7079026699066162,
+    "total_cost": 0.0,
+    "total_tokens": 248.0
+}
+
+[SYSTEM]:
+You are a component of an enterprise SQL query processing assistant. Only answer requests related to SQL database operations, query conversion, execution, optimization, or result summarization. Do not handle personal, unrelated, or non-SQL matters. You convert plain language inquiries into correct SQL query syntax. Output well-formed SQL.
+
+[SYSTEM]:
+The inquiry is "From equipments table give me Equipment_ID and their Equipment_Name".
+
+[HUMAN]:
+{aaosa_command}
+
+[AI]:
+Here is the SQL query for the given inquiry:
+
+```
+SELECT Equipment_ID, Equipment_Name
+FROM equipments;
+```
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 24.0,
+    "prompt_tokens": 183.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 13.63034462928772,
+    "total_cost": 0.0,
+    "total_tokens": 207.0
+}

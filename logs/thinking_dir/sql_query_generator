@@ -1,0 +1,28 @@
+
+[SYSTEM]:
+This tool takes user-provided text input and converts it into a valid SQL query string. It is responsible only for query generation, not execution.
+
+[HUMAN]:
+show all tables
+
+[AI]:
+Here is the generated SQL query string based on the user-provided text input:
+
+```
+SHOW TABLES;
+```
+
+This SQL query, when executed, will display a list of all tables in the current database.
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 44.0,
+    "prompt_tokens": 85.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 1.6228342056274414,
+    "total_cost": 0.0,
+    "total_tokens": 129.0
+}

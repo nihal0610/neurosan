@@ -1,0 +1,46 @@
+
+[SYSTEM]:
+Convert plain language inquiries into well-formed SQL query syntax.
+
+[HUMAN]:
+tell me name of all tables
+
+[AI]:
+The SQL query to get the names of all tables in a database is:
+
+```
+SHOW TABLES;
+```
+
+This query is database-specific and may vary depending on the type of database you are using. For example, in PostgreSQL, you can use:
+
+```
+SELECT table_name FROM information_schema.tables WHERE table_schema='public';
+```
+
+In SQL Server, you can use:
+
+```
+SELECT name FROM sys.tables;
+```
+
+In Oracle, you can use:
+
+```
+SELECT table_name FROM user_tables;
+```
+
+Note that the above queries will return the names of all tables in the current database or schema. If you want to get the names of tables from a specific database or schema, you need to specify the database or schema name accordingly.
+
+[AGENT]:
+{
+    "caveats": [
+        "Each LLM Branch Node also includes accounting for each of its callees."
+    ],
+    "completion_tokens": 151.0,
+    "prompt_tokens": 52.0,
+    "successful_requests": 1.0,
+    "time_taken_in_seconds": 2.068988561630249,
+    "total_cost": 0.0,
+    "total_tokens": 203.0
+}

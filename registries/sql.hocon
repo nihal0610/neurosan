@@ -1,0 +1,117 @@
+{
+  "llm_config": {
+    "class": "groq",
+    "model_name": "llama3-70b-8192",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "model_kwargs": {
+      "top_p": 0.9
+    }
+  },
+
+  "max_iterations": 2000,
+  "max_execution_seconds": 600,
+
+  "commondefs": {
+    "replacement_strings": {
+      "instructions_prefix": "You are a component of an enterprise SQL query processing assistant. Only answer requests related to SQL database operations, query conversion, execution, optimization, or result summarization. Do not handle personal, unrelated, or non-SQL matters.",
+      "aaosa_instructions": "You are an agent orchestrator managing downstream tools. On receiving an inquiry: 1. Check which of your tools (downstream agents) can handle it. 2. Call those tools with appropriate context and inquiry. 3. Gather their requirements or responses. 4. Fulfill requirements by either querying other agents or the user. 5. Collate final results and respond. Do not answer without consulting your tools."
+    },
+
+    "replacement_values": {
+      "aaosa_call": {
+        "description": "Handles SQL inquiries in a structured way.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "inquiry": {
+              "type": "string",
+              "description": "The SQL-related inquiry"
+            },
+            "mode": {
+              "type": "string",
+              "description": "Whether determining claim, collecting requirements, responding, or following up"
+            }
+          },
+          "required": ["inquiry", "mode"]
+        }
+      },
+
+      "aaosa_command": "If relevant, return: Yes, strength: <[1-10]>, claim: <All|[partial inquiry]>, requirements: <None | [list]> If not relevant, return N/A"
+    }
+  },
+
+  "tools": [
+    {
+      "name": "sql_query_processor",
+      "function": {
+        "description": "Main SQL assistant managing end-to-end SQL query handling."
+      },
+      "instructions": "{instructions_prefix} You manage SQL inquiry routing. Collect and relay between downstream agents: - sql_to_text_converter - sql_query_executor - sql_result_summarizer Follow the orchestration workflow as per {aaosa_instructions}",
+      "tools": ["sql_to_text_converter", "sql_query_executor", "sql_result_summarizer"],
+      "command": "{aaosa_command}"
+    },
+    {
+        "name": "sql_to_text_converter",
+        "function": {
+            "description": "Converts natural language inquiries into SQL queries.",
+            "parameters": {
+            "type": "object",
+            "properties": {
+                "inquiry": {
+                "type": "string",
+                "description": "Natural language inquiry to convert to SQL"
+                }
+            },
+            "required": ["inquiry"]
+            }
+        },
+        "instructions": "{instructions_prefix} You convert plain language inquiries into correct SQL query syntax. Output well-formed SQL.",
+        "command": "{aaosa_command}",
+        "tools": []
+        },
+        {
+    "name": "sql_query_executor",
+    "class": "MySQL_Executor_Tool.MySQLExecutorTool",
+    "function": {
+        "description": "Executes SQL queries against the production_line MySQL database.",
+        "parameters": {
+        "type": "object",
+        "properties": {
+            "query": {
+            "type": "string",
+            "description": "The SQL query to execute"
+            }
+        },
+        "required": ["query"]
+        }
+    },
+    "instructions": "Execute validated SQL queries against the production_line MySQL database. Return result data or an error message.",
+    "parameters": {
+        "host": "localhost",
+        "user": "root",
+        "password": "chotu0610",
+        "database": "production_line"
+    }
+    },
+    {
+      "name": "sql_result_summarizer",
+      "function": {
+        "description": "Summarizes or analyzes result sets from executed SQL queries.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "results": {
+              "type": "string",
+              "description": "Raw query results to be summarized"
+            }
+          },
+          "required": ["results"]
+        }
+      },
+      "instructions": "{instructions_prefix} Summarize, format, and optionally visualize SQL query results. Provide insights and highlights where appropriate.",
+      "command": "{aaosa_command}",
+      "tools": []
+    }
+  ]
+}

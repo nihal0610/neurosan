@@ -1,0 +1,172 @@
+{
+  "agent_tool_path": "../coded_tools",
+  "llm_config": {
+    "class": "groq",
+    "model_name": "llama3-70b-8192",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "model_kwargs": {
+      "top_p": 0.9
+    }
+  },
+  "max_iterations": 1000,
+  "max_execution_seconds": 300,
+  "tools": [
+    {
+      "name": "presentation_agent",
+      "function": {
+        "description": "Manages end-to-end PPT creation by delegating to sub-agents.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_input": {
+              "type": "string",
+              "description": "Topic for the presentation (e.g., 'AI in Healthcare')."
+            }
+          },
+          "required": ["user_input"]
+        }
+      },
+      "instructions": """
+      You are an AI agent that creates PowerPoint presentations. 
+      Follow this workflow strictly:
+        1. Fetch data via web search.
+        2. Structure data into slides (1 topic per slide, bullet points).
+        3. Generate a PPT file.
+
+      When you receive an inquiry:
+        1. Call tools to validate relevance.
+        2. Gather requirements (if any).
+        3. Return a structured slide draft separated by '$'.
+
+      Responsibilities:
+        1. Accept user input (e.g., "Quantum Computing").
+        2. Coordinate with sub-agents to:
+           - Fetch data (web_searcher).
+           - Format slides (data_formatter).
+           - Generate PPT (ppt_maker).
+        3. Return the final .pptx file.
+      """,
+      "tools": ["web_searcher", "data_formatter", "ppt_maker"]
+    },
+    {
+      "name": "web_searcher",
+      "function": {
+        "description": "Searches the web for topic data using DuckDuckGo.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query (e.g., 'Latest trends in blockchain')."
+            }
+          },
+          "required": ["query"]
+        }
+      },
+      "instructions": """
+      Use DuckDuckGo to fetch high-quality sources.
+      Rules:
+        1. Filter out irrelevant/outdated data.
+        2. Return raw data (summaries, stats, links).
+      """,
+      "tools": ["website_search"]
+    },
+    {
+      "name": "data_formatter",
+      "function": {
+        "description": "Structures raw data into slide-ready text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "raw_data": {
+              "type": "string",
+              "description": "Raw text from web search."
+            }
+          },
+          "required": ["raw_data"]
+        }
+      },
+      "instructions": """
+      Formatting Rules:
+        1. 1 topic per slide.
+        2. Max 5 bullet points per slide.
+        3. Separate slides with '$'.
+      Example Output:
+        "Slide 1: Topic\\n- Point 1\\n- Point 2\\n$Slide 2: Topic\\n- Point A"
+      """
+    },
+    {
+      "name": "ppt_maker",
+      "function": {
+        "description": "Generates a .pptx file from structured text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "slides_text": {
+              "type": "string",
+              "description": "Text formatted with '$' separators."
+            },
+            "output_file": {
+              "type": "string",
+              "description": "Output filename (e.g., 'presentation.pptx').",
+              "default": "output_presentation.pptx"
+            }
+          },
+          "required": ["slides_text"]
+        }
+      },
+      "instructions": """
+      Steps:
+        1. Parse text split by '$'.
+        2. Create slides (Title + Content layout).
+        3. Apply styling (bold, font size 15, black text).
+        4. Save as .pptx.
+      """,
+      "tools": ["python_pptx_tool"]
+    },
+    {
+      "name": "website_search",
+      "class": "website_search.WebsiteSearch",
+      "function": {
+        "description": "Searches DuckDuckGo and returns top links.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Optional base URL (optional)."
+            },
+            "search_terms": {
+              "type": "string",
+              "description": "Search terms to look up (required)."
+            }
+          },
+          "required": ["search_terms"]
+        }
+      }
+    },
+    {
+      "name": "python_pptx_tool",
+      "class": "python_pptx_tool.PythonPPTXTool",
+      "function": {
+        "description": "Generates PPTX using python-pptx.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "slides_text": {
+              "type": "string",
+              "description": "Text separated by '$' for slides."
+            },
+            "output_file": {
+              "type": "string",
+              "description": "Output filename.",
+              "default": "output_presentation.pptx"
+            }
+          },
+          "required": ["slides_text"]
+        }
+      }
+    }
+  ]
+}
