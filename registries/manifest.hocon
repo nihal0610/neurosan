@@ -26,7 +26,8 @@
     "current_time_tool.hocon":true,
     "ppt.hocon":true,
     "sql.hocon":true,
-
+    "log_uploader.hocon":true,
+    "runbook_generator.hocon":true,
     # Tool integration examples
     "brave_search.hocon": false,
     "agent_network_html_creator.hocon": true,
@@ -49,7 +50,7 @@
     # The MCP server is running.
     # The server can be found at servers/MCP/bmi_server.py and run using the following command
     # python bmi_server.py
-    "mcp_bmi_streamable_http.hocon": false,
+    "mcp_bmi_streamable_http.hocon": true,
 
     # The following agent network is an example of Agent2Agent (A2A) Protocol implementation:
     # Make sure to start the A2A server before turning the agent on.

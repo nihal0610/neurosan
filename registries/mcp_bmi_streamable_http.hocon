@@ -11,8 +11,14 @@
 # END COPYRIGHT
 {
     "llm_config": {
-        "model_name": "gpt-4o",
-    },
+    "class": "groq",
+    "model_name": "llama3-70b-8192",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "model_kwargs": {
+      "top_p": 0.9
+    }
+  },
     "tools": [
         # These tool definitions do not have to be in any particular order
         # How they are linked and call each other is defined within their

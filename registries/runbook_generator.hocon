@@ -1,0 +1,107 @@
+{
+  "llm_config": {
+    "class": "groq",
+    "model_name": "llama3-70b-8192",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "model_kwargs": {
+      "top_p": 0.9
+    }
+  },
+
+  "max_iterations": 2000,
+  "max_execution_seconds": 600,
+
+  "commondefs": {
+    "replacement_strings": {
+      "instructions_prefix": "You are part of an AI system that helps generate diagnostic runbooks using logs, KBs, and incident summaries. Only handle file reading, data formatting, and runbook generation tasks."
+    }
+  },
+
+  "tools": [
+
+    {
+      "name": "runbook_orchestrator",
+      "function": {
+        "description": "Manages the full flow from file input to runbook generation.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "Short summary of the incident"
+            }
+          },
+          "required": ["summary"]
+        }
+      },
+      "instructions": "{instructions_prefix} You orchestrate runbook generation:\n1. Load log file using file_uploader_tool.\n2. Load KB file using file_uploader_tool.\n3. Format input using runbook_generator_tool.\n4. Pass to runbook_llm.\n5. Return final Markdown runbook.",
+      "tools": ["file_uploader_tool", "runbook_generator_tool", "runbook_llm"]
+    },
+
+    {
+      "name": "file_uploader_tool",
+      "class": "log_uploader.log_upload_tool.FileUploaderTool",
+      "function": {
+        "description": "Reads and returns the content of a text file from a given path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "Path to the file to upload and read."
+            }
+          },
+          "required": ["file_path"]
+        }
+      },
+      "instructions": "{instructions_prefix} Use this tool to load content from logs, KBs, or summaries by file path."
+    },
+
+    {
+      "name": "runbook_generator_tool",
+      "class": "runbook_generator.runbook_generator_tool.RunbookGeneratorTool",
+      "function": {
+        "description": "Generates a runbook prompt from logs, KBs, and incident summary.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "logs": {
+              "type": "string",
+              "description": "The log content to analyze."
+            },
+            "kb_content": {
+              "type": "string",
+              "description": "Knowledge base or SOP content."
+            },
+            "summary": {
+              "type": "string",
+              "description": "Incident title or description."
+            }
+          },
+          "required": ["logs", "kb_content"]
+        }
+      },
+      "instructions": "{instructions_prefix} This tool prepares a clean and detailed prompt using logs, KBs, and summaries for downstream LLM use."
+    },
+
+    {
+      "name": "runbook_llm",
+      "class": "llm",
+      "function": {
+        "description": "Uses LLM to create a step-by-step diagnostic runbook from the combined input.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "Formatted prompt from runbook_generator_tool."
+            }
+          },
+          "required": ["prompt"]
+        }
+      },
+      "instructions": "{instructions_prefix} You generate structured, Markdown-formatted diagnostic runbooks based on the prompt. Use sections, steps, and clarity."
+    }
+  ]
+}

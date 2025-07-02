@@ -1,0 +1,9 @@
+
+[AGENT]:
+Received arguments {'weight': 62.0, 'height': 1.7, 'origin': [{'tool': 'bmi_provider', 'instantiation_index': 1}, {'tool': 'bmi_calculator', 'instantiation_index': 2}], 'origin_str': 'bmi_provider.bmi_calculator-02'}
+
+[AGENT]:
+Received arguments {'weight': 70.0, 'height': 1.75, 'origin': [{'tool': 'bmi_provider', 'instantiation_index': 1}, {'tool': 'bmi_calculator', 'instantiation_index': 2}], 'origin_str': 'bmi_provider.bmi_calculator-02'}
+
+[AGENT]:
+Received arguments {'weight': 70.0, 'height': 1.75, 'origin': [{'tool': 'bmi_provider', 'instantiation_index': 1}, {'tool': 'bmi_calculator', 'instantiation_index': 2}], 'origin_str': 'bmi_provider.bmi_calculator-02'}

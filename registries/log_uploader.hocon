@@ -1,0 +1,34 @@
+{
+  "llm_config": {
+    "class": "groq",
+    "model_name": "llama3-70b-8192",
+    "temperature": 0.7,
+    "max_tokens": 8192,
+    "model_kwargs": {
+      "top_p": 0.9
+    }
+  },
+  "tools": [
+    {
+      "name": "file_uploader_tool",
+
+      "class": "log_upload_tool.FileUploaderTool",
+
+      "function": {
+        "description": "Reads and returns the content of a text file from a given path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "Path to the file to upload and read."
+            }
+          },
+          "required": ["file_path"]
+        }
+      },
+
+      "instructions": "This tool reads the content of a file from the provided file_path and returns the content as text. It returns an error message if the file is missing or cannot be read."
+    }
+  ]
+}
